@@ -14,6 +14,7 @@ public class ForkController : PathEnd
     //Properties 
     //public PathCreator BasePathCreator => basePathCreator;
     public PathCreator AvailablePathCreator => isFirstFork ? firstForkPath.pathCreator : secondForkPath.pathCreator;
+    public PathEnd PathEnd => isFirstFork ? firstForkPath.pathEnd : secondForkPath.pathEnd;
     
     [Button]
     public void ChangePath()
@@ -37,4 +38,5 @@ public class Path
     public PathCreator pathCreator;
     public GameObject pathObjectForked;
     public GameObject pathObjectUnForked;
+    public PathEnd pathEnd;
 }

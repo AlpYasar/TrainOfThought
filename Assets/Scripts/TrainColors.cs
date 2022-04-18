@@ -2,6 +2,9 @@
 {
     public enum TrainColors
     {
-        
+        Red,
+        Blue,
+        Green,
+        Pink
     }
 }

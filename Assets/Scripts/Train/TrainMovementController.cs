@@ -1,4 +1,6 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
+using Manager;
 using UnityEngine;
 using NaughtyAttributes;
 using PathCreation;
@@ -11,39 +13,51 @@ namespace Train
     // Depending on the end of path instruction, will either loop, reverse, or stop at the end of the path.
     public class TrainMovementController : MonoBehaviour
     {
+        [SerializeField] private Train train;
         [SerializeField] private PathEnd pathEnd;
         public PathCreator pathCreator;
         public EndOfPathInstruction endOfPathInstruction;
         public float speed = 5;
         
+        //Properties
+        public Train Train => train;
+        
         private float distanceTravelled;
         [SerializeField, ReadOnly] private bool isEndTypeFork;
         private ForkController forkController;
+        private Station station;
         
 
-        private Vector3 endPosition;
-
-        void Start() {
+        void OnEnable() {
             if (pathCreator != null)
             {
                 // Subscribed to the pathUpdated event so that we're notified if the path changes during the game
                 pathCreator.pathUpdated += OnPathChanged;
-                
-                
-                pathCreator.path.GetFirstPoint();
-                endPosition = pathCreator.path.GetLastPoint();
             }
             
-            //if Type of end is fork
+            CheckEndType();
+            //FallowingToLine method added to LifeCycle update
+            LifeCycleManager.update += FallowingToLine;
+        }
+
+        private void OnDisable()
+        {
+            LifeCycleManager.update -= FallowingToLine;
+        }
+
+        private void CheckEndType()
+        {
             if (typeof(ForkController) == pathEnd.GetTypeOfObject())
             {
                 forkController = GetComponentInParent<ForkController>();
                 isEndTypeFork = true;
             }
-            
-            
+            else
+            {
+                station = GetComponentInParent<Station>();
+                isEndTypeFork = false;
+            }
         }
-
         
         private void FallowingToLine()
         {
@@ -55,31 +69,33 @@ namespace Train
 
             if (!(distanceTravelled >= pathCreator.path.length - 0.1f)) return;
             
+            WhenEndOfThePath();
+        }
+
+        private void WhenEndOfThePath()
+        {
             distanceTravelled = 0;
             pathCreator = null;
             Debug.Log("Reached end of path");
             
-            if (forkController.AvailablePathCreator)
+            if (isEndTypeFork)
             {
                 transform.DOMove(forkController.AvailablePathCreator.path.GetFirstPoint(), speed).SetSpeedBased(true).
-                    OnComplete(()=> pathCreator = forkController.AvailablePathCreator);
+                    OnComplete(()=>
+                    {
+                        pathCreator = forkController.AvailablePathCreator;
+                        pathEnd = forkController.PathEnd;
+                        CheckEndType();
+                    });
             }
             else
             {
-                transform.DOMove(forkController.AvailablePathCreator.path.GetFirstPoint(), speed).SetSpeedBased(true).
-                    OnComplete(()=> pathCreator = forkController.AvailablePathCreator);
+                transform.DOMove(station.transform.position, speed).SetSpeedBased(true).
+                    OnComplete(()=> station.OnTrainArrived(this));
             }
         }
         
-
-        [Button]
-        private void CubeMaker()
-        {
-            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.position = transform.position;
-            cube.transform.rotation = transform.rotation;
-        }
-
+        
         // If the path changes during the game, update the distance travelled so that the follower's position on the new path
         // is as close as possible to its position on the old path
         void OnPathChanged() {
