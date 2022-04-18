@@ -2,9 +2,9 @@
 using Train;
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace PathEnds
 {
-    public abstract class LineEnd : MonoBehaviour
+    public abstract class PathEnd : MonoBehaviour
     {
         public virtual void OnLineEnd(TrainMovementController line)
         {
@@ -12,9 +12,7 @@ namespace DefaultNamespace
         }
         
         //This virtual method get type of object
-        public virtual Type GetTypeOfObject()
-        {
-            return typeof(LineEnd);
-        }
+        public abstract Type GetTypeOfObject();
+
     }
 }

@@ -1,8 +1,8 @@
-﻿using DefaultNamespace;
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 using NaughtyAttributes;
 using PathCreation;
+using PathEnds;
 
 namespace Train
 {
@@ -11,13 +11,16 @@ namespace Train
     // Depending on the end of path instruction, will either loop, reverse, or stop at the end of the path.
     public class TrainMovementController : MonoBehaviour
     {
-        [SerializeField] private LineEnd lineEnd;
+        [SerializeField] private PathEnd pathEnd;
         public PathCreator pathCreator;
         public EndOfPathInstruction endOfPathInstruction;
         public float speed = 5;
-        float distanceTravelled;
         
-        private Vector3 startPosition;
+        private float distanceTravelled;
+        [SerializeField, ReadOnly] private bool isEndTypeFork;
+        private ForkController forkController;
+        
+
         private Vector3 endPosition;
 
         void Start() {
@@ -27,14 +30,21 @@ namespace Train
                 pathCreator.pathUpdated += OnPathChanged;
                 
                 
-                startPosition = pathCreator.path.GetFirstPoint();
+                pathCreator.path.GetFirstPoint();
                 endPosition = pathCreator.path.GetLastPoint();
             }
             
-            Debug.Log("Type: " + lineEnd.GetTypeOfObject());
+            //if Type of end is fork
+            if (typeof(ForkController) == pathEnd.GetTypeOfObject())
+            {
+                forkController = GetComponentInParent<ForkController>();
+                isEndTypeFork = true;
+            }
+            
+            
         }
 
-        /*
+        
         private void FallowingToLine()
         {
             if (pathCreator == null) return;
@@ -49,18 +59,18 @@ namespace Train
             pathCreator = null;
             Debug.Log("Reached end of path");
             
-            if (lineEnd.AvailablePathCreator)
+            if (forkController.AvailablePathCreator)
             {
-                transform.DOMove(lineEnd.AvailablePathCreator.path.GetFirstPoint(), speed).SetSpeedBased(true).
-                    OnComplete(()=> pathCreator = lineEnd.AvailablePathCreator);
+                transform.DOMove(forkController.AvailablePathCreator.path.GetFirstPoint(), speed).SetSpeedBased(true).
+                    OnComplete(()=> pathCreator = forkController.AvailablePathCreator);
             }
             else
             {
-                transform.DOMove(lineEnd.AvailablePathCreator.path.GetFirstPoint(), speed).SetSpeedBased(true).
-                    OnComplete(()=> pathCreator = lineEnd.AvailablePathCreator);
+                transform.DOMove(forkController.AvailablePathCreator.path.GetFirstPoint(), speed).SetSpeedBased(true).
+                    OnComplete(()=> pathCreator = forkController.AvailablePathCreator);
             }
         }
-        */
+        
 
         [Button]
         private void CubeMaker()

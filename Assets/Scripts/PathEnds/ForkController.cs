@@ -1,10 +1,10 @@
 using System;
-using DefaultNamespace;
 using UnityEngine;
 using NaughtyAttributes;
 using PathCreation;
+using PathEnds;
 
-public class ForkController : LineEnd
+public class ForkController : PathEnd
 {
     //[SerializeField, BoxGroup("Paths")] private PathCreator basePathCreator;
     [SerializeField, BoxGroup("Paths"), HorizontalLine(color: EColor.Blue)] private Path firstForkPath;
@@ -24,7 +24,11 @@ public class ForkController : LineEnd
         secondForkPath.pathObjectForked.SetActive(!isFirstFork);
         secondForkPath.pathObjectUnForked.SetActive(isFirstFork);
     }
-    
+
+    public override Type GetTypeOfObject()
+    {
+        return typeof(ForkController);
+    }
 }
 
 [Serializable]
