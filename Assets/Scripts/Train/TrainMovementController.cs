@@ -26,8 +26,8 @@ namespace Train
         [SerializeField, ReadOnly] private bool isEndTypeFork;
         private ForkController forkController;
         private Station station;
-        
 
+        #region UnityMethods
         void OnEnable() {
             if (pathCreator != null)
             {
@@ -35,16 +35,24 @@ namespace Train
                 pathCreator.pathUpdated += OnPathChanged;
             }
             
-            CheckEndType();
             //FallowingToLine method added to LifeCycle update
             LifeCycleManager.update += FallowingToLine;
         }
 
-        private void OnDisable()
+        void OnDisable()
         {
             LifeCycleManager.update -= FallowingToLine;
         }
+            
 
+        #endregion
+        
+        public void SpawnConstructor(PathEnd firstFork, PathCreator firstPath)
+        {
+            pathCreator = firstPath;
+            pathEnd = firstFork;
+            CheckEndType();
+        }
         private void CheckEndType()
         {
             if (typeof(ForkController) == pathEnd.GetTypeOfObject())

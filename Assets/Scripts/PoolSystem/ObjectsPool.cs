@@ -6,7 +6,9 @@ namespace PoolSystem
 {
     public class ObjectsPool : MonoBehaviour
     {
-        public static ObjectsPool Instance;
+        //Singleton
+        public static ObjectsPool Instance => _instance;
+        private static ObjectsPool _instance;
         
         [Serializable]
         public class PoolItem
@@ -20,7 +22,14 @@ namespace PoolSystem
 
         private void Awake()
         {
-            Instance = this;
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                _instance = this;
+            }
         }
 
         private void Start()
