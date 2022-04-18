@@ -13,8 +13,8 @@ public class ForkController : PathEnd
     
     //Properties 
     //public PathCreator BasePathCreator => basePathCreator;
-    public PathCreator AvailablePathCreator => isFirstFork ? firstForkPath.pathCreator : secondForkPath.pathCreator;
-    public PathEnd PathEnd => isFirstFork ? firstForkPath.pathEnd : secondForkPath.pathEnd;
+    [ShowNativeProperty] public PathCreator AvailablePathCreator => isFirstFork ? firstForkPath.pathCreator : secondForkPath.pathCreator;
+    [ShowNativeProperty] public PathEnd PathEnd => isFirstFork ? firstForkPath.pathEnd : secondForkPath.pathEnd;
     
     [Button]
     public void ChangePath()

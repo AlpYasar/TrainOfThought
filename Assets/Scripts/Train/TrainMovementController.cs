@@ -49,12 +49,12 @@ namespace Train
         {
             if (typeof(ForkController) == pathEnd.GetTypeOfObject())
             {
-                forkController = GetComponentInParent<ForkController>();
+                forkController = pathEnd.GetComponentInParent<ForkController>();
                 isEndTypeFork = true;
             }
             else
             {
-                station = GetComponentInParent<Station>();
+                station = pathEnd.GetComponentInParent<Station>();
                 isEndTypeFork = false;
             }
         }
@@ -80,13 +80,21 @@ namespace Train
             
             if (isEndTypeFork)
             {
-                transform.DOMove(forkController.AvailablePathCreator.path.GetFirstPoint(), speed).SetSpeedBased(true).
+                var point = forkController.AvailablePathCreator.path.GetFirstPoint();
+                var targetRotation = forkController.AvailablePathCreator.path.GetRotationAtDistance(0, EndOfPathInstruction.Stop);
+                
+                //tween time
+                var tweenTime = Vector3.Distance(transform.position, point) / speed;
+                transform.DOMove(point, tweenTime).
                     OnComplete(()=>
                     {
+                        Debug.Log("On Complete");
                         pathCreator = forkController.AvailablePathCreator;
                         pathEnd = forkController.PathEnd;
+                        Debug.Log("Before check end type");
                         CheckEndType();
                     });
+                transform.DORotateQuaternion(targetRotation, tweenTime);
             }
             else
             {

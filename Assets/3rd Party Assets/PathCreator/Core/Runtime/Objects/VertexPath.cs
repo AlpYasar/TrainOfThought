@@ -178,10 +178,18 @@ namespace PathCreation {
         public Vector3 GetFirstPoint () {
             return GetPoint (0);
         }
-        
+
         ///Gets the last point of the path
         public Vector3 GetLastPoint () {
             return GetPoint (localPoints.Length - 1);
+        }
+        
+        public Vector3 GetFirstPointRotation() {
+            return GetTangent (0);
+        }
+        
+        public Vector3 GetLastPointRotation() {
+            return GetTangent (localTangents.Length - 1);
         }
 
         /// Gets point on path based on distance travelled.
