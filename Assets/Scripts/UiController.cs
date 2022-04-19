@@ -9,8 +9,13 @@ using UnityAtoms.BaseAtoms;
 
 public class UiController : MonoBehaviour
 {
-    [SerializeField] private GameObject counterGameObject;
-    [SerializeField] private VoidEvent startSpawningEvent;
+    [SerializeField, BoxGroup("Countdown")] private GameObject counterGameObject;
+    [SerializeField, BoxGroup("Countdown")] private VoidEvent startSpawningEvent;
+    [SerializeField, BoxGroup("Spawned")] private TextMeshProUGUI spawnedText;
+    [SerializeField, BoxGroup("Spawned")] private IntVariable spawnedCount;
+    [SerializeField, BoxGroup("Correct Text")] private TextMeshProUGUI correctText;
+    [SerializeField, BoxGroup("Finish")] private GameObject finishUI;
+    [SerializeField, BoxGroup("Finish")] private TextMeshProUGUI finishText;
     private TextMeshProUGUI counterText;
     private int counterValue = 3;
     private float counterTime = 0.5f;
@@ -43,5 +48,22 @@ public class UiController : MonoBehaviour
                     counterGameObject.SetActive(false);
                 }
             });
+    }
+    
+    public void UpdateSpawnedCount()
+    {
+        spawnedText.text = spawnedCount.Value.ToString();
+    }
+    
+    public void UpdateCorrectCount(int arrived, int correct)
+    {
+        correctText.text = $"{correct}/{arrived}";
+    }
+
+
+    public void ShowFinishScreen(int correctCount, int arrivedCount)
+    {
+        finishText.text = "You got " + correctCount + " out of " + arrivedCount + " correct!";
+        finishUI.SetActive(true);
     }
 }

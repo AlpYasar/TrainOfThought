@@ -15,6 +15,7 @@ namespace Manager
     {
         private ObjectsPool pool;
         
+        [SerializeField] private VoidEvent spawnedEvent;
         [SerializeField, BoxGroup("Spawner Params")] private GameObject[] prefabs;
         [SerializeField, BoxGroup("Spawner Params")] private IntVariable maxSpawnCount;
         [SerializeField, BoxGroup("Spawner Params")] private IntVariable spawnedCount;  
@@ -51,6 +52,7 @@ namespace Manager
                 
                 obj.SetActive(true);
                 spawnedCount.Value++;
+                spawnedEvent.Raise();
                 yield return new WaitForSeconds(delay);
             }
         }

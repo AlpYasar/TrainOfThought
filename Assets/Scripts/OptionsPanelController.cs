@@ -47,7 +47,7 @@ public class OptionsPanelController : MonoBehaviour
     private void SetSliderValues()
     {
         trainCountSlider.value = 30;
-        trainSpeedSlider.value = 3f;
+        trainSpeedSlider.value = 2.5f;
     }
     
 }

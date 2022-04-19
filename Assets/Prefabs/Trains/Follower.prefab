@@ -306,7 +306,7 @@ MonoBehaviour:
   pathEnd: {fileID: 0}
   pathCreator: {fileID: 0}
   endOfPathInstruction: 0
-  speed: 3
+  speed: {fileID: 0}
   isEndTypeFork: 0
 --- !u!114 &5100752767469436351
 MonoBehaviour:
@@ -320,7 +320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e6395606734e52b2c877d5856e9607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainColors: 0
+  trainColors: 1
   trainMovement: {fileID: 0}
 --- !u!1 &5101492092532658265
 GameObject:
