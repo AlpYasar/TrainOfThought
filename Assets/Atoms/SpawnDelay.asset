@@ -15,13 +15,13 @@ MonoBehaviour:
   _developerDescription: 
   Min:
     _usage: 0
-    _value: 0.5
+    _value: 1.5
     _constant: {fileID: 0}
     _variable: {fileID: 0}
     _variableInstancer: {fileID: 0}
   Max:
     _usage: 0
-    _value: 1.5
+    _value: 2.5
     _constant: {fileID: 0}
     _variable: {fileID: 0}
     _variableInstancer: {fileID: 0}

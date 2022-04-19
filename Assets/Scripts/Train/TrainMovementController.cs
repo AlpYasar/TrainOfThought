@@ -5,6 +5,8 @@ using UnityEngine;
 using NaughtyAttributes;
 using PathCreation;
 using PathEnds;
+using UnityAtoms.BaseAtoms;
+using UnityAtoms.BaseAtoms;
 
 namespace Train
 {
@@ -16,8 +18,8 @@ namespace Train
         [SerializeField] private Train train;
         [SerializeField] private PathEnd pathEnd;
         public PathCreator pathCreator;
-        public EndOfPathInstruction endOfPathInstruction;
-        public float speed = 5;
+        public EndOfPathInstruction endOfPathInstruction; 
+        [SerializeField] public FloatVariable speed;
         
         //Properties
         public Train Train => train;
@@ -71,7 +73,7 @@ namespace Train
         {
             if (pathCreator == null) return;
             
-            distanceTravelled += speed * Time.deltaTime;
+            distanceTravelled += speed.Value * Time.deltaTime;
             transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
             transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
 
@@ -92,7 +94,7 @@ namespace Train
                 var targetRotation = forkController.AvailablePathCreator.path.GetRotationAtDistance(0, EndOfPathInstruction.Stop);
                 
                 //tween time
-                var tweenTime = Vector3.Distance(transform.position, point) / speed;
+                var tweenTime = Vector3.Distance(transform.position, point) / speed.Value;
                 transform.DOMove(point, tweenTime).
                     OnComplete(()=>
                     {
@@ -106,7 +108,7 @@ namespace Train
             }
             else
             {
-                transform.DOMove(station.transform.position, speed).SetSpeedBased(true).
+                transform.DOMove(station.transform.position, speed.Value).SetSpeedBased(true).
                     OnComplete(()=> station.OnTrainArrived(this));
             }
         }

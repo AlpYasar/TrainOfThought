@@ -53,8 +53,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5101480710242335787, guid: 8c39793af842b264b8bb96e6a3a79fa8, type: 3}
       propertyPath: m_Name
-      value: Train Red
+      value: Train Red Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 5943531602745196156, guid: 8c39793af842b264b8bb96e6a3a79fa8, type: 3}
+      propertyPath: speed
+      value: 
+      objectReference: {fileID: 11400000, guid: ffe11251d859c244dad1bcfa458d3251, type: 2}
     - target: {fileID: 5943531602745196156, guid: 8c39793af842b264b8bb96e6a3a79fa8, type: 3}
       propertyPath: pathEnd
       value: 

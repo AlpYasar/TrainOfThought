@@ -16,7 +16,7 @@ namespace Manager
         private ObjectsPool pool;
         
         [SerializeField, BoxGroup("Spawner Params")] private GameObject[] prefabs;
-        [SerializeField, BoxGroup("Spawner Params")] private int maxSpawnCount;
+        [SerializeField, BoxGroup("Spawner Params")] private IntVariable maxSpawnCount;
         [SerializeField, BoxGroup("Spawner Params")] private IntVariable spawnedCount;  
         [SerializeField, BoxGroup("Spawner Params")] private ClampFloat spawnDelay;
         [SerializeField, BoxGroup("Spawner Params"), NaughtyAttributes.ReadOnly] private float delay;
@@ -38,7 +38,7 @@ namespace Manager
         
         private IEnumerator Spawn()
         {
-            while (spawnedCount.Value < maxSpawnCount)
+            while (spawnedCount.Value < maxSpawnCount.Value)
             {
                 delay = Random.Range(spawnDelay.Min, spawnDelay.Max);
                 var prefab = prefabs[Random.Range(0, prefabs.Length)];
