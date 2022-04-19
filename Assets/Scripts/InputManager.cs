@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using HoverController;
+using Manager;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -24,12 +25,15 @@ public class InputManager : MonoBehaviour
     private void Start()
     {
         hoverObjectController = HoverObjectController.Instance;
+        LifeCycleManager.update += HoverFork;
+        LifeCycleManager.update += ClickChecker;
     }
 
     // Update is called once per frame
-    void Update()
+    void OnDisable()
     {
-        HoverFork();
+        LifeCycleManager.update -= HoverFork;
+        LifeCycleManager.update -= ClickChecker;
     }
     
     private void HoverFork()
@@ -47,6 +51,15 @@ public class InputManager : MonoBehaviour
             if (!isHovering) return;
             hoverObjectController.SetInactive();
             isHovering = false;
+        }
+    }
+    
+    //Click method to change fork
+    private void ClickChecker()
+    {
+        if (isHovering && Input.GetMouseButtonDown(0))
+        {
+            hit.transform.GetComponent<ForkController>().ChangePath(); 
         }
     }
 }
